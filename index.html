@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Country</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Montserrat', Verdana, Geneva, Tahoma, sans-serif;
+            /* text-align: justify; */
+        }
+        body{
+            padding: 0;
+            margin: 0;
+            background-color: rgb(120, 22, 212);
+            box-sizing: border-box;
+        }
+        .back{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100vh;
+        }
+        .container{
+            display: flex;
+            flex-direction: column;
+            /* justify-content: center; */
+            border-radius: 7px;
+            align-items: center;
+            width: 80vw;
+            max-width: 400px;
+            height: auto;
+            background-color: #fff;
+        }
+        .searcher{
+            display: grid;
+            grid-template-columns: 12fr 3fr;
+            gap: 10px;
+            padding: 20px 0px;
+        }
+        .searcher input{
+            padding: 5px 5px;
+            border: none;
+            border-bottom: 2px solid rgb(120, 22, 212);
+            color: black;
+            font-size: 13px;
+        }
+        .searcher input:focus{
+            outline: none;
+        }
+        .searcher button{
+            background-color: rgb(120, 22, 212);
+            padding: 7px 15px;
+            border-radius:17px;
+            border: none;
+            color: #fff;
+            font-size: 11px;
+        }
+        #result{
+            display: flex;
+            flex-direction: column;
+            /* margin-top: 2px; */
+        }
+        .flag-img{
+            display: block;
+            width: 45%;
+            min-width: 150px;
+            margin: 7px auto;
+        }
+        .name{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .content{
+            padding:0px 20px;
+        }
+        .content ul li{
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="back">
+        <div class="container">
+            <div class="searcher">
+                <input type="text" id="country_inp" placeholder="Enter a country name...">
+                <button type="submit" id="search_btn">Search</button>
+            </div>
+            <div id="result"></div>
+        </div>
+    </div>
+    <script>
+        let searchBtn = document.getElementById("search_btn");
+        let countryIpn = document.getElementById("country_inp");
+        searchBtn.addEventListener("click", () =>{
+            let countryName = countryIpn.value;
+            let finalURL = `https://restcountries.com/v3.1/name/${countryName}?fullText=true`;
+            console.log(finalURL);
+            fetch(finalURL)
+            .then((response) => response.json())
+            .then((data) => {
+                // console.log(data[0]);
+                // console.log(data[0].capital[0]);
+                // console.log(data[0].flags.svg);
+                // console.log(data[0].name.common);
+                // console.log(data[0].continents[0]); 
+                // console.log(Object.keys(data[0].currencies)[0]);
+                // console.log(data[0].currencies[Object.keys(data[0].currencies)].name);
+                // console.log(
+                //     Object.values(data[0].languages).toString().split(",").join(", "));
+                result.innerHTML = `
+                <img src="${data[0].flags.svg}"
+                class="flag-img">
+                <div class="name">
+                    <h2>${data[0].name.common}</h2>
+                </div>
+                <div class="content">
+                    <ul>
+                        <li><strong>Capital :</strong> ${data[0].capital[0]}</li>
+                        <li><strong>Continent :</strong> ${data[0].continents[0]}</li>
+                        <li><strong>Population :</strong> ${data[0].population}</li>
+                        <li><strong>Currency :</strong> ${data[0].currencies[Object.keys(data[0].currencies)].name} - ${Object.keys(data[0].currencies)[0]}</li>
+                        <li><strong>Languages :</strong> ${Object.values(data[0].languages).toString().split(",").join(", ")}</li>
+                    </ul>
+                </div>
+                 `;
+            })
+        });
+        // .catch(() => {
+        //     if(countryName.length == 0){
+        //         result.innerHTML = `<h4>The input field cannot be empty</h4>`;
+        //     }
+        //     else{
+        //         result.innerHTML = `<h4>Please enter a valid country name</h4>`;
+        //     }
+        // });
+    </script>
+</body>
+
+</html>
